@@ -1,0 +1,3 @@
+# Keep uploaded menu out of version control
+storage/*
+!storage/.gitkeep

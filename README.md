@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kazumi Menu
 
-## Getting Started
+Aplicación web minimalista para mostrar y actualizar el menú PDF del restaurante Kazumi.
 
-First, run the development server:
+Dominio: https://menu.kazumi.emasanz.dev
+
+## Stack
+
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS
+- JWT en cookie HttpOnly (sin base de datos)
+
+## Requisitos
+
+- Node.js 18.18 o superior
+
+## Configuración
+
+1. Instalar dependencias:
+
+```bash
+npm install
+```
+
+2. Copiar variables de entorno:
+
+```bash
+cp .env.example .env.local
+```
+
+3. Editar `.env.local` con credenciales seguras:
+
+```env
+ADMIN_USER=admin
+ADMIN_PASSWORD=password123
+JWT_SECRET=una_clave_super_segura
+```
+
+4. Asegurarse de que exista el archivo `storage/menu.pdf` (se incluye uno de ejemplo al clonar).
+
+## Desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Menú público: http://localhost:3000
+- Administración: http://localhost:3000/admin
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Producción
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Rutas
 
-To learn more about Next.js, take a look at the following resources:
+| Ruta | Descripción |
+|------|-------------|
+| `/` | Visor del menú PDF a pantalla completa |
+| `/admin` | Login y panel de administración |
+| `GET /api/menu` | Sirve el PDF desde `storage/menu.pdf` |
+| `POST /api/login` | Autenticación |
+| `POST /api/logout` | Cierre de sesión |
+| `POST /api/upload` | Reemplazo del menú (requiere sesión) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Almacenamiento
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El PDF se guarda siempre en:
 
-## Deploy on Vercel
+```
+storage/menu.pdf
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+No se usa la carpeta `public`. El archivo se sirve mediante la API `/api/menu`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Despliegue
+
+Compatible con cualquier hosting Node.js (VPS, Railway, Render, etc.).
+
+Variables de entorno requeridas en producción:
+
+- `ADMIN_USER`
+- `ADMIN_PASSWORD`
+- `JWT_SECRET`
+- `NODE_ENV=production`
+
+Asegúrate de que la carpeta `storage/` sea persistente en el servidor para conservar el menú entre despliegues.
